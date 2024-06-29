@@ -1,5 +1,3 @@
-#YOLO V8
-
 import cv2
 from ultralytics import YOLO
 import numpy as np
@@ -133,6 +131,14 @@ def update_frame():
         cv2.putText(frame, f"Bottom Right Obstructed: {bottom_right_percentage:.2f}%", (10, 120), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
     else:
         cv2.putText(frame, "Bottom Right Clear", (10, 120), cv2.FONT_HERSHEY_SIMPLEX, 0.5, stationary_color, 2)
+
+    # Check if all quadrants are sufficiently obstructed
+    obstruction_threshold = 20  # Set an appropriate threshold
+    if (top_left_percentage > obstruction_threshold and
+        top_right_percentage > obstruction_threshold and
+        bottom_left_percentage > obstruction_threshold and
+        bottom_right_percentage > obstruction_threshold):
+        cv2.putText(frame, "Stop: No clear space for the drone to go.", (10, frame_height - 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
 
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     img = Image.fromarray(frame_rgb)
